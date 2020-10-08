@@ -63,14 +63,6 @@ readMaxQuantPeptideMeasurements <- function(path) {
     return(maxquant)
 }
 
-
-
-#prettyToSlotNameMap = list('Peptides' = 'peptides',
-#                           'Razor...unique.peptides' = 'razor_unique_peptides',
-#                           'Unique.peptides' = 'unique_peptides',
-#                           'Identification.type' = 'ident_type',
-#                           'Intensity' = 'intensity',
-#                           'LFQ intensity' = 'lfq_intensity')
 setClass("MaxQuantPeptidesResult", slots=list(
     accession = "character",
     sequence = "character",
@@ -92,7 +84,6 @@ setMethod('show', 'MaxQuantPeptidesResult', function(object){
 
 mergeMaxQuantPeptideResults <-function(mqs, new_experiment_name, session) {
     new_mq = new('MaxQuantPeptidesResult')
-    #slot(new_mq, 'accession') <- unique(unlist(sapply(mqs, function(mq){return(mq@accession)}), recursive = F))
     slot(new_mq, 'samples') <- unique(unlist(sapply(mqs, function(mq){return(mq@samples)}), recursive = F))
     slot(new_mq, 'sequence') <- unique(unlist(sapply(mqs, function(mq){return(mq@sequence)}), recursive = F))
 

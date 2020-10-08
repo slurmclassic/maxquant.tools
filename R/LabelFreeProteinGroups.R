@@ -74,14 +74,6 @@ readMaxQuantProteinMeasurements <- function(path) {
     return(maxquant)
 }
 
-
-
-#prettyToSlotNameMap = list('Peptides' = 'peptides',
-#                           'Razor...unique.peptides' = 'razor_unique_peptides',
-#                           'Unique.peptides' = 'unique_peptides',
-#                           'Identification.type' = 'ident_type',
-#                           'Intensity' = 'intensity',
-#                           'LFQ intensity' = 'lfq_intensity')
 setClass("MaxQuantProteinGroupsResult", slots=list(
     accession = "character",
     intensity = "matrix",
@@ -150,24 +142,6 @@ mergeMaxQuantProteinResults <-function(mqs, new_experiment_name, session) {
 
         max(as.numeric(vals), na.rm = T)
     })
-
-    #all_vals = c()
-    #for (accession in new_mq@accession) {
-    #    vals = c(NA)
-    #    for (mq in mqs) {
-    #        if (accession %in% mq@accession) {
-    #            vals = c(vals, mq@peptide_counts_all[accession])
-    #        }
-    #    }
-    #
-    #    all_vals = c(paste0(all_vals, '[', paste(as.character(vals), collapse = ','), ']'))
-    #}
-
-    #updateTextAreaInput(session, 'debug_text', 'Debug Text', value = as.character(all_vals))
-
-
-
-
 
     slot(new_mq, 'reverse') <- sapply(new_mq@accession, function(accession){
         vals = c(NA)
