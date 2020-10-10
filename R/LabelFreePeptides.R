@@ -82,7 +82,7 @@ setMethod('show', 'MaxQuantPeptidesResult', function(object){
     print(data.frame(Sample = object@samples, Group = object@groups), row.names=F)
 })
 
-mergeMaxQuantPeptideResults <-function(mqs, new_experiment_name, session) {
+mergeMaxQuantPeptideResults <-function(mqs, new_experiment_name) {
     new_mq = new('MaxQuantPeptidesResult')
     slot(new_mq, 'samples') <- unique(unlist(sapply(mqs, function(mq){return(mq@samples)}), recursive = F))
     slot(new_mq, 'sequence') <- unique(unlist(sapply(mqs, function(mq){return(mq@sequence)}), recursive = F))
@@ -151,3 +151,44 @@ mergeMaxQuantPeptideResults <-function(mqs, new_experiment_name, session) {
 
     new_mq
 }
+
+setMethod("+",
+          signature(e1 = "MaxQuantPeptidesResult", e2 = "MaxQuantPeptidesResult"),
+          function(e1, e2) {
+              mergeMaxQuantPeptideResults(list(e1, e2), 'Merged Dataset')
+          }
+
+)
+
+setMethod("[",
+          signature(x = "MaxQuantPeptidesResult", i = "ANY", j = "ANY"),
+          function (x, i, j, ..., drop = TRUE)
+          {
+              mdrop <- missing(drop)
+              Narg <- nargs() - !mdrop
+              if (Narg < 3) {
+                  j = i
+                  i = T
+              }
+
+              x@intensity = x@intensity[i, j]
+              #x@lfq_intensity = x@lfq_intensity[i, j]
+              x@accession = x@accession[i]
+              x@sequence = x@sequence[i]
+              x@pvalues = x@pvalues[i]
+              x@samples = x@samples[j]
+              x@groups = x@groups[j]
+              if (nrow(x@ident_type) > 0 | ncol(x@ident_type) > 0) {
+                  x@ident_type = x@ident_type[i, j]
+              }
+
+              x@reverse = x@reverse[i]
+              x@potential_contaminant = x@potential_contaminant[i]
+              x
+          }
+)
+
+
+
+
+
